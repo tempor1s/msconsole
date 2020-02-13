@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"github.com/BenAndGarys/msconsole-go/modules"
 )
 
 func init() {
@@ -15,11 +14,6 @@ var checkinCommand = &cobra.Command{
 	Short: "Check you into your class.",
 	Long: "This command will allow the user to checkin to a class using a code.",
 	Run: func(cmd *cobra.Command, args[]string) {
-		if len(args) == 0 {
-			fmt.Println("Please enter a a checkin code to this command. Example: `ms checkin dog`")
-			return
-		}
-
-		fmt.Printf("Your checkin code is %s\n", args[0])
+		modules.CheckinModule(cmd, args)
 	},
 }
