@@ -2,9 +2,11 @@ package modules
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/levigross/grequests"
+	"log"
+	"strings"
+
+	"github.com/antchfx/htmlquery"
 	"github.com/spf13/cobra"
 )
 
@@ -33,23 +35,44 @@ func CheckinModule(cmdCtx *cobra.Command, args[]string) {
 
 	// Create a map with the info we want to login with
 	formData := map[string]string{
-		"user[email]": "", // Make school dashboard login here
-		"user[password]": "", // Make school password here
+		"user[email]": "benlaugherty@gmail.com", // Make school dashboard login here
+		"user[password]": "{RfV.4G8{Kv>tU82zYbR", // Make school password here
 	}
 
-	// Create new request options with that data
-	ro := &grequests.RequestOptions{Data: formData}
-
-	// Post that data to the login page, and get the response
-	resp, err := s.Session.Post(loginURL, ro)
+	// Parse string into html node so we can parse
+	htmlData, err := htmlquery.Parse(strings.NewReader(loginPage.String()))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(resp.String())
+	// Find all hidden inputs
+	nodes := htmlquery.Find(htmlData, "//form//input[@type='hidden']")
+
+	// Get authenticity token
+	for _, node := range nodes {
+		for i, item := range node.Attr {
+			if item.Val == "authenticity_token" {
+				formData[item.Val] = node.Attr[i + 1].Val
+			}
+		}
+	}
+
+	fmt.Println(formData)
+
+	// Post that data to the login page, and get the response
+	resp, err := s.Session.Post(loginURL, &grequests.RequestOptions{Data:formData, RedirectLimit:3})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println(resp.StatusCode)
 
-	fmt.Printf("Your checkin code is %s\n", args[0])
+	resp, err = s.Session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]), &grequests.RequestOptions{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(getBannerMessage(resp.String()))
 }
 
 // Session represents stuff to do with making requests and keeping a session to do so
@@ -59,12 +82,19 @@ type Session struct {
 }
 
 func NewSession() *Session {
-	ro := &grequests.RequestOptions{}
+	ro := &grequests.RequestOptions{RedirectLimit:100}
 	session := grequests.NewSession(ro)
 
 	return &Session{Session:session, DefaultRO:ro}
 }
 
-func login() {}
+func getBannerMessage(page string) string {
+	htmlData, err := htmlquery.Parse(strings.NewReader(page))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func checkin() {}
+	nodes := htmlquery.Find(htmlData, "//*[@id='js-header']/div[3]/div/text()")
+	// TODO: Decide if we wanna trim or not
+	return strings.TrimSpace(nodes[0].Data)
+}

@@ -3,6 +3,8 @@ module github.com/BenAndGarys/msconsole-go
 go 1.13
 
 require (
+	github.com/antchfx/htmlquery v1.2.2
+	github.com/antchfx/xpath v1.1.4 // indirect
 	github.com/levigross/grequests v0.0.0-20190908174114-253788527a1a
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
