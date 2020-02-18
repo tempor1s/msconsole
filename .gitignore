@@ -21,6 +21,3 @@ msconsole-go
 # Editors
 .idea
 .vscode
-
-# Environment Vars
-.env

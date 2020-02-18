@@ -2,18 +2,21 @@ package modules
 
 import (
 	"fmt"
-	"github.com/BenAndGarys/msconsole-go/graphql"
-	"github.com/imroc/req"
-	"github.com/levigross/grequests"
 	"log"
 	"strings"
+
+	"github.com/BenAndGarys/msconsole-go/credentials"
+	"github.com/BenAndGarys/msconsole-go/graphql"
+
+	"github.com/imroc/req"
+	"github.com/levigross/grequests"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/spf13/cobra"
 )
 
 // CheckinModule is the source code that allows a user to checkin to a class using a code.
-func CheckinModule(cmdCtx *cobra.Command, args[]string) {
+func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	if len(args) == 0 {
 		fmt.Println("Please enter a a checkin code to this command. Example: `ms checkin dog`")
 		return
@@ -31,14 +34,17 @@ func CheckinModule(cmdCtx *cobra.Command, args[]string) {
 		log.Fatal(err)
 	}
 
+	// Get username and password
+	email, password := credentials.GetCredentials()
+
 	param := req.Param{
-		"user[email]": "",
-		"user[password]": "",
+		"user[email]":    email,
+		"user[password]": password,
 	}
 
 	header := req.Header{
 		"Content-Type": "application/x-www-form-urlencoded",
-		"User-Agent": "MSConsole - https://github.comn/BenAndGarys/msconsole-go",
+		"User-Agent":   "MSConsole - https://github.comn/BenAndGarys/msconsole-go",
 	}
 
 	resp, err := session.Post(loginURL, param, header)
@@ -88,7 +94,7 @@ func getBannerMessage(page string) string {
 // TODO: Maybe user a color lib? lol
 func colorBannerMessage(message string) string {
 	switch message {
-		// red
+	// red
 	case "You are not registered for this class.":
 		fallthrough
 	case "You need to be connected to Make School Wi-Fi to check-in.":
