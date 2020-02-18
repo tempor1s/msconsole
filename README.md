@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to msConsole 👋</h1>
+<h1 align="center">Welcome to MSConsole 👋</h1>
 <img src="docs/media/make_logo_new.png" title="Makeschool Icon"></a>
 <p>
   <a>

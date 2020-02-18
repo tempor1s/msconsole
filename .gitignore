@@ -21,3 +21,6 @@ msconsole-go
 # Editors
 .idea
 .vscode
+
+# Distribution
+/dist

@@ -9,7 +9,6 @@ import (
 	"github.com/BenAndGarys/msconsole-go/graphql"
 
 	"github.com/imroc/req"
-	"github.com/levigross/grequests"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/spf13/cobra"
@@ -25,16 +24,16 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	// Create a new session
 	session := req.New()
 
-	// Log the user in and set new cookies :)
+	// Log the user in and set cookies :)
 	loginUser(session, false)
 
 	// Get the logged in users name and email from Graph QL
-	name, email := graphql.GetGraphUserInfo(session)
+	name, email := graphql.UserInfo(session)
 
 	fmt.Printf("\nName: %s\nMS Email: %s\n\n", name, email)
 
 	// Try to log the user in
-	resp, err := session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]), &grequests.RequestOptions{})
+	resp, err := session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]))
 	if err != nil {
 		log.Fatal(err)
 	}

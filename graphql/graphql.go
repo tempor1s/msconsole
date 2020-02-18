@@ -6,7 +6,7 @@ import (
 	"github.com/imroc/req"
 )
 
-type UserInfo struct {
+type Info struct {
 	Data struct {
 		CurrentUser struct {
 			Name         string `json:"name"`
@@ -15,7 +15,7 @@ type UserInfo struct {
 	} `json:"data"`
 }
 
-func GetGraphUserInfo(session *req.Req) (string, string) {
+func UserInfo(session *req.Req) (string, string) {
 
 	url := "https://www.makeschool.com/graphql"
 	query := "{ currentUser {name studentEmail} }"
@@ -26,7 +26,7 @@ func GetGraphUserInfo(session *req.Req) (string, string) {
 		log.Fatal(err)
 	}
 
-	var data UserInfo
+	var data Info
 	resp.ToJSON(&data)
 
 	return data.Data.CurrentUser.Name, data.Data.CurrentUser.StudentEmail
