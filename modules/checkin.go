@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"github.com/BenAndGarys/msconsole-go/graphql"
 	"github.com/imroc/req"
 	"github.com/levigross/grequests"
 	"log"
@@ -31,8 +32,8 @@ func CheckinModule(cmdCtx *cobra.Command, args[]string) {
 	}
 
 	param := req.Param{
-		"user[email]": "email",
-		"user[password]": "password",
+		"user[email]": "",
+		"user[password]": "",
 	}
 
 	header := req.Header{
@@ -56,7 +57,12 @@ func CheckinModule(cmdCtx *cobra.Command, args[]string) {
 	if bannerMessage != "Signed in successfully." {
 		log.Fatal(bannerMessage)
 	}
-	fmt.Println(bannerMessage)
+	fmt.Print(colorBannerMessage(bannerMessage))
+
+	// Get the logged in users name and email from Graph QL
+	name, email := graphql.GetGraphUserInfo(session)
+
+	fmt.Printf("\nName: %s\nMS Email: %s\n\n", name, email)
 
 	// Try to log the user in
 	resp, err = session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]), &grequests.RequestOptions{})
@@ -65,7 +71,8 @@ func CheckinModule(cmdCtx *cobra.Command, args[]string) {
 	}
 
 	// Print the new banner message.
-	fmt.Println(getBannerMessage(resp.String()))
+	bannerMessage = getBannerMessage(resp.String())
+	fmt.Print(colorBannerMessage(bannerMessage))
 }
 
 func getBannerMessage(page string) string {
@@ -75,6 +82,32 @@ func getBannerMessage(page string) string {
 	}
 
 	nodes := htmlquery.Find(htmlData, "//*[@id='js-header']/div[3]/div/text()")
-	// TODO: Decide if we wanna trim or not
 	return strings.TrimSpace(nodes[0].Data)
+}
+
+// TODO: Maybe user a color lib? lol
+func colorBannerMessage(message string) string {
+	switch message {
+		// red
+	case "You are not registered for this class.":
+		fallthrough
+	case "You need to be connected to Make School Wi-Fi to check-in.":
+		return fmt.Sprintf("\x1b[1;31m%s\x1b[0m\n", message)
+		// green
+	case "You have already checked in as for this class.":
+		fallthrough
+	case "You have checked in as present for this class.":
+		fallthrough
+	case "Signed in successfully.":
+		fallthrough
+	case "You have checked in tardy for this class.":
+		return fmt.Sprintf("\x1b[1;32m%s\x1b[0m\n", message)
+		// yellow
+	case "You code is not related to any class.":
+		fallthrough
+	case "You cannot check-in after a class is already over":
+		fallthrough
+	default:
+		return fmt.Sprintf("\033[93m%s\x1b[0m\n", message)
+	}
 }
