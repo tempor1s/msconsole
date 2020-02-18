@@ -25,6 +25,26 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	// Create a new session
 	session := req.New()
 
+	// Log the user in and set new cookies :)
+	loginUser(session, false)
+
+	// Get the logged in users name and email from Graph QL
+	name, email := graphql.GetGraphUserInfo(session)
+
+	fmt.Printf("\nName: %s\nMS Email: %s\n\n", name, email)
+
+	// Try to log the user in
+	resp, err := session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]), &grequests.RequestOptions{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Print the new banner message.
+	bannerMessage := getBannerMessage(resp.String())
+	fmt.Print(colorBannerMessage(bannerMessage))
+}
+
+func loginUser(session *req.Req, retry bool) {
 	// loginURL is just the url we are getting/posting to to log the user in
 	loginURL := "https://www.makeschool.com/login"
 
@@ -32,6 +52,11 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	_, err := session.Get(loginURL)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	// If we are on a retry, we want to delete the old credentials
+	if retry {
+		credentials.DeleteCredentials()
 	}
 
 	// Get username and password
@@ -60,25 +85,15 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	// Get the banner message from the response body
 	bannerMessage := getBannerMessage(resp.String())
 
-	if bannerMessage != "Signed in successfully." {
+	// If banner message is not successful login, then we retry login
+	if bannerMessage == "Invalid Email or password." {
+		fmt.Println("\n\x1b[1;31mInvalid username or password. Please try again!\x1b[0m")
+		loginUser(session, true)
+	} else if bannerMessage != "Signed in successfully." {
 		log.Fatal(bannerMessage)
+	} else {
+		fmt.Print(colorBannerMessage(bannerMessage))
 	}
-	fmt.Print(colorBannerMessage(bannerMessage))
-
-	// Get the logged in users name and email from Graph QL
-	name, email := graphql.GetGraphUserInfo(session)
-
-	fmt.Printf("\nName: %s\nMS Email: %s\n\n", name, email)
-
-	// Try to log the user in
-	resp, err = session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]), &grequests.RequestOptions{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Print the new banner message.
-	bannerMessage = getBannerMessage(resp.String())
-	fmt.Print(colorBannerMessage(bannerMessage))
 }
 
 func getBannerMessage(page string) string {
