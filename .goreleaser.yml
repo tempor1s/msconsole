@@ -1,26 +1,81 @@
-# This is an example goreleaser.yaml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
+env:
+  - GO111MODULE=on
 before:
   hooks:
-    # you may remove this if you don't use vgo
-    - go mod tidy
+    - go mod download
 builds:
-- env:
-  - CGO_ENABLED=0
+    - id: msconsole-darwin-amd64
+      ldflags: -s -w -X github.com/BenAndGarys/msconsole-go/pkg/version.Version={{.Version}} -X github.com/BenAndGarys/msconsole-go/pkg/version.BuildDate={{.Date}} -X github.com/BenAndGarys/msconsole-go/pkg/version.CommitHash={{ .ShortCommit }}
+      binary: msc
+      env:
+          - CGO_ENABLED=1
+          - CC=o64-clang
+          - CXX=o64-clang++
+      main: ./main.go
+      goos:
+          - darwin
+      goarch:
+          - amd64
+    - id: msconsole-linux-amd64
+      ldflags: -s -w -X github.com/BenAndGarys/msconsole-go/pkg/version.Version={{.Version}} -X github.com/BenAndGarys/msconsole-go/pkg/version.BuildDate={{.Date}} -X github.com/BenAndGarys/msconsole-go/pkg/version.CommitHash={{ .ShortCommit }}
+      binary: msc
+      env:
+          - CGO_ENABLED=1
+      main: ./main.go
+      goos:
+          - linux
+      goarch:
+          - amd64
+    - id: msconsole-windows-amd64
+      ldflags: -s -w -X github.com/BenAndGarys/msconsole-go/pkg/version.Version={{.Version}} -X github.com/BenAndGarys/msconsole-go/pkg/version.BuildDate={{.Date}} -X github.com/BenAndGarys/msconsole-go/pkg/version.CommitHash={{ .ShortCommit }}
+      binary: msc
+      env:
+          - CGO_ENABLED=1
+          - CC=x86_64-w64-mingw32-gcc
+          - CXX=x86_64-w64-mingw32-g++
+      main: ./main.go
+      goos:
+          - windows
+      goarch:
+          - amd64
+brews:
+    - github:
+          owner: BenAndGarys
+          name: homebrew-msconsole
+      folder: Formula
+      homepage: https://github.com/BenAndGarys/msconsole-go
+      description: A suite of tools to make your life easier!
 archives:
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+    - format: tar.gz
+      format_overrides:
+          - goos: windows
+            format: zip
+      name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
+      replacements:
+          amd64: 64bit
+          386: 32bit
+          arm: ARM
+          arm64: ARM64
+          darwin: macOS
+          linux: Linux
+          windows: Windows
+          openbsd: OpenBSD
+          netbsd: NetBSD
+          freebsd: FreeBSD
+          dragonfly: DragonFlyBSD
+      files:
+          - Readme.MD
+          - LICENSE
 checksum:
-  name_template: 'checksums.txt'
+    name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-next"
+    name_template: '{{ .Tag }}-next'
 changelog:
-  sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
+    sort: asc
+    filters:
+        exclude:
+            - '^docs:'
+            - '^test:'
+            - 'README'
+            - Merge pull request
+            - Merge branch
