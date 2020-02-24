@@ -4,63 +4,64 @@ import (
 	"log"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/docker/docker-credential-helpers/credentials"
+	"github.com/keybase/go-keychain"
 )
 
-// SetCredentials will set and return given creds
+// SetCredentials will add the credentials to the keychain
 func SetCredentials() (string, string) {
-	// TODO: Update this with correct URL when we swap repo
 	email, password := getCreds()
 
-	url := "https://github.com/BenAndGarys/msconsole-go"
-	set("msconsole", url, email, password)
+	item := keychain.NewGenericPassword("MSConsole", email, "MSConsole Credentials", []byte(password), "msconsole")
+	item.SetSynchronizable(keychain.SynchronizableNo)
+	item.SetAccessible(keychain.AccessibleWhenUnlocked)
+
+	err := keychain.AddItem(item)
+	if err == keychain.ErrorDuplicateItem {
+		log.Fatal("duplicate item in keychain")
+	}
 
 	return email, password
 }
 
 // GetCredentials will get creds from keychain
 func GetCredentials() (string, string) {
-	url := "https://github.com/BenAndGarys/msconsole-go"
-	email, password, err := get("msconsole", url)
-
+	accounts, err := keychain.GetAccountsForService("MSConsole")
 	if err != nil {
-		SetCredentials()
-		email, password = GetCredentials()
+		log.Fatal(err)
 	}
 
-	return email, password
-}
+	if len(accounts) < 1 {
+		SetCredentials()
+	}
 
-func DeleteCredentials() {
-	url := "https://github.com/BenAndGarys/msconsole-go"
-	err := del("msconsole", url)
+	email := accounts[0]
+
+	storedAccount, err := keychain.GetGenericPassword("MSConsole", email, "MSConsole Credentials", "msconsole")
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	return email, string(storedAccount)
 }
 
-// set adds an item to the keychain
-func set(lbl, url, email, secret string) error {
-	cr := &credentials.Credentials{
-		ServerURL: url,
-		Username:  email,
-		Secret:    secret,
+// DeleteCredentials will delete bad username and password from keychain
+func DeleteCredentials() {
+	accounts, err := keychain.GetAccountsForService("MSConsole")
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	credentials.SetCredsLabel(lbl)
-	return ns.Add(cr)
-}
+	if len(accounts) < 1 {
+		SetCredentials()
+	}
 
-// get an entry in the keychain
-func get(lbl, url string) (string, string, error) {
-	credentials.SetCredsLabel(lbl)
-	return ns.Get(url)
-}
+	email := accounts[0]
 
-func del(lbl, url string) error {
-	credentials.SetCredsLabel(lbl)
-	return ns.Delete(url)
+	err = keychain.DeleteGenericPasswordItem("MSConsole", email)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // getCreds will prompt the user for creds, in a pretty way!

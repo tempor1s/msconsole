@@ -10,6 +10,7 @@ require (
 	github.com/docker/docker-credential-helpers v0.6.3
 	github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef // indirect
 	github.com/imroc/req v0.3.0
+	github.com/keybase/go-keychain v0.0.0-20200218013740-86d4642e4ce2
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/spf13/cobra v0.0.5
