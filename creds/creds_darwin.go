@@ -1,4 +1,4 @@
-package credentials
+package creds
 
 import "github.com/docker/docker-credential-helpers/osxkeychain"
 

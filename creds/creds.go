@@ -1,13 +1,13 @@
-package credentials
+package creds
 
 import (
 	"log"
 
 	"github.com/AlecAivazis/survey/v2"
-	dcred "github.com/docker/docker-credential-helpers/credentials"
+	"github.com/docker/docker-credential-helpers/credentials"
 )
 
-// SetCredentials will set and return given credentials
+// SetCredentials will set and return given creds
 func SetCredentials() (string, string) {
 	// TODO: Update this with correct URL when we swap repo
 	email, password := getCreds()
@@ -42,28 +42,28 @@ func DeleteCredentials() {
 
 // set adds an item to the keychain
 func set(lbl, url, email, secret string) error {
-	cr := &dcred.Credentials{
+	cr := &credentials.Credentials{
 		ServerURL: url,
 		Username:  email,
 		Secret:    secret,
 	}
 
-	dcred.SetCredsLabel(lbl)
+	credentials.SetCredsLabel(lbl)
 	return ns.Add(cr)
 }
 
 // get an entry in the keychain
 func get(lbl, url string) (string, string, error) {
-	dcred.SetCredsLabel(lbl)
+	credentials.SetCredsLabel(lbl)
 	return ns.Get(url)
 }
 
 func del(lbl, url string) error {
-	dcred.SetCredsLabel(lbl)
+	credentials.SetCredsLabel(lbl)
 	return ns.Delete(url)
 }
 
-// getCreds will prompt the user for credentials, in a pretty way!
+// getCreds will prompt the user for creds, in a pretty way!
 func getCreds() (string, string) {
 	qs := []*survey.Question{
 		{

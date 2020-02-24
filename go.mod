@@ -1,4 +1,4 @@
-module github.com/BenAndGarys/msconsole-go
+module github.com/tempor1s/msconsole-go
 
 go 1.13
 

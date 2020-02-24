@@ -1,6 +1,6 @@
 package main
 
-import "github.com/BenAndGarys/msconsole-go/cmd"
+import "github.com/tempor1s/msconsole-go/cmd"
 
 func main() {
 	cmd.Execute()

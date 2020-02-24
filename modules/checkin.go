@@ -5,8 +5,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/BenAndGarys/msconsole-go/credentials"
-	"github.com/BenAndGarys/msconsole-go/graphql"
+	"github.com/tempor1s/msconsole-go/creds"
+
+	"github.com/tempor1s/msconsole-go/graphql"
 
 	"github.com/imroc/req"
 
@@ -53,13 +54,13 @@ func loginUser(session *req.Req, retry bool) {
 		log.Fatal(err)
 	}
 
-	// If we are on a retry, we want to delete the old credentials
+	// If we are on a retry, we want to delete the old creds
 	if retry {
-		credentials.DeleteCredentials()
+		creds.DeleteCredentials()
 	}
 
 	// Get username and password
-	email, password := credentials.GetCredentials()
+	email, password := creds.GetCredentials()
 
 	param := req.Param{
 		"user[email]":    email,
