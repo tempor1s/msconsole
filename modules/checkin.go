@@ -5,9 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/tempor1s/msconsole-go/creds"
-
-	"github.com/tempor1s/msconsole-go/graphql"
+	"github.com/tempor1s/msconsole/creds"
+	"github.com/tempor1s/msconsole/graphql"
 
 	"github.com/imroc/req"
 
@@ -73,7 +72,7 @@ func loginUser(session *req.Req, retry bool) {
 
 	header := req.Header{
 		"Content-Type": "application/x-www-form-urlencoded",
-		"User-Agent":   "MSConsole - https://github.comn/tempor1s/msconsole-go",
+		"User-Agent":   "MSConsole - https://github.comn/tempor1s/msconsole",
 	}
 
 	resp, err := session.Post(loginURL, param, header)

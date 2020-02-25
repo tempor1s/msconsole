@@ -2,10 +2,10 @@
 <img src="docs/media/make_logo_new.png" title="Makeschool Icon"></a>
 <p>
   <a>
-    <a href="https://goreportcard.com/badge/github.com/tempor1s/msconsole-go" />
-    <img alt="commits" src="https://goreportcard.com/badge/github.com/tempor1s/msconsole-go" target="_blank" />
+    <a href="https://goreportcard.com/badge/github.com/tempor1s/msconsole" />
+    <img alt="commits" src="https://goreportcard.com/badge/github.com/tempor1s/msconsole" target="_blank" />
     <a href="https://github.com/tempor1s/msconsole/commits/master">
-    <img alt="commits" src="https://img.shields.io/github/commit-activity/w/tempor1s/msconsole-go?color=green" target="_blank" />
+    <img alt="commits" src="https://img.shields.io/github/commit-activity/w/tempor1s/msconsole?color=green" target="_blank" />
   </a> 
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
@@ -24,9 +24,9 @@
 
 ```bash
 # tap the repo
-brew tap tempor1s/msconsole https://github.com/tempor1s/msconsole-go
+brew tap tempor1s/msconsole
 # install the CLI tool
-brew install msconsole-go
+brew install msconsole
 # get a list of all the commands
 ms
 ```

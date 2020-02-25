@@ -1,64 +1,64 @@
 env:
-  - GO111MODULE=on
-  - CGO_ENABLED=1
+    - GO111MODULE=on
+    - CGO_ENABLED=1
 before:
-  hooks:
-    - go mod tidy
-    - go mod download
+    hooks:
+        - go mod tidy
+        - go mod download
 builds:
-  - id: msconsole-darwin-amd64
-    binary: msc
-    env:
-      - CGO_ENABLED=1
-      - GO111MODULE=on
-      - CC=o64-clang
-      - CXX=o64-clang++
-    main: ./main.go
-    goos:
-      - darwin
-    goarch:
-      - amd64
-    ignore:
-      - goos: darwin
-        goarch: 386
+    - id: msconsole-darwin-amd64
+      binary: ms
+      env:
+          - CGO_ENABLED=1
+          - GO111MODULE=on
+          - CC=o64-clang
+          - CXX=o64-clang++
+      main: ./main.go
+      goos:
+          - darwin
+      goarch:
+          - amd64
+      ignore:
+          - goos: darwin
+            goarch: 386
 brews:
-  - github:
-      owner: tempor1s
-      name: homebrew-msconsole
-    folder: Formula
-    homepage: https://github.com/tempor1s/msconsole-go
-    description: A suite of tools to make your life easier!
+    - github:
+          owner: tempor1s
+          name: homebrew-msconsole
+      folder: Formula
+      homepage: https://github.com/tempor1s/msconsole
+      description: A suite of tools to make your life easier!
 archives:
-  - format: tar.gz
-    format_overrides:
-      - goos: windows
-        format: zip
-    name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
-    replacements:
-      amd64: 64bit
-      386: 32bit
-      arm: ARM
-      arm64: ARM64
-      darwin: macOS
-      linux: Linux
-      windows: Windows
-      openbsd: OpenBSD
-      netbsd: NetBSD
-      freebsd: FreeBSD
-      dragonfly: DragonFlyBSD
-    files:
-      - Readme.MD
-      - LICENSE
+    - format: tar.gz
+      format_overrides:
+          - goos: windows
+            format: zip
+      name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
+      replacements:
+          amd64: 64bit
+          386: 32bit
+          arm: ARM
+          arm64: ARM64
+          darwin: macOS
+          linux: Linux
+          windows: Windows
+          openbsd: OpenBSD
+          netbsd: NetBSD
+          freebsd: FreeBSD
+          dragonfly: DragonFlyBSD
+      files:
+          - Readme.MD
+          - LICENSE
 checksum:
-  name_template: 'checksums.txt'
+    name_template: 'checksums.txt'
 snapshot:
-  name_template: '{{ .Tag }}-next'
+    name_template: '{{ .Tag }}-next'
 changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
-      - 'README'
-      - Merge pull request
-      - Merge branch
+    sort: asc
+    filters:
+        exclude:
+            - '^docs:'
+            - '^test:'
+            - 'README'
+            - Merge pull request
+            - Merge branch

@@ -16,7 +16,7 @@
 
 # Binary
 main
-msconsole-go
+msconsole
 
 # Editors
 .idea
