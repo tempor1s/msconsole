@@ -73,7 +73,7 @@ func loginUser(session *req.Req, retry bool) {
 
 	header := req.Header{
 		"Content-Type": "application/x-www-form-urlencoded",
-		"User-Agent":   "MSConsole - https://github.comn/BenAndGarys/msconsole-go",
+		"User-Agent":   "MSConsole - https://github.comn/tempor1s/msconsole-go",
 	}
 
 	resp, err := session.Post(loginURL, param, header)
