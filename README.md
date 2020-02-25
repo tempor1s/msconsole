@@ -20,7 +20,7 @@
 
 ## 🚀 Getting Started
 
-### Get - COMING SOON!
+### Use the tool!
 
 ```bash
 # tap the repo
