@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Global flags
+// Verbose simply specifies if you want verbose logging when running commands.
 var Verbose bool
 
 // Root command

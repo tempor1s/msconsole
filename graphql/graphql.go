@@ -6,6 +6,7 @@ import (
 	"github.com/imroc/req"
 )
 
+// Info represents the json struct that we get back from Make School.
 type Info struct {
 	Data struct {
 		CurrentUser struct {
@@ -15,6 +16,7 @@ type Info struct {
 	} `json:"data"`
 }
 
+// UserInfo will grab the users name and email from the makeschool GraphQL API
 func UserInfo(session *req.Req) (string, string) {
 
 	url := "https://www.makeschool.com/graphql"
