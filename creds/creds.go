@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/keybase/go-keychain"
+	keychain "github.com/keybase/go-keychain"
 )
 
 // SetCredentials will add the credentials to the keychain
@@ -31,7 +31,8 @@ func GetCredentials() (string, string) {
 	}
 
 	if len(accounts) < 1 {
-		SetCredentials()
+		email, password := SetCredentials()
+		return email, password
 	}
 
 	email := accounts[0]
@@ -45,7 +46,7 @@ func GetCredentials() (string, string) {
 	return email, string(storedAccount)
 }
 
-// DeleteCredentials will delete bad username and password from keychain
+// DeleteCredentials will delete bad username and password from go-keychain
 func DeleteCredentials() {
 	accounts, err := keychain.GetAccountsForService("MSConsole")
 	if err != nil {

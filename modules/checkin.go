@@ -62,6 +62,10 @@ func loginUser(session *req.Req, retry bool) {
 	// Get username and password
 	email, password := creds.GetCredentials()
 
+	if email == "" || password == "" {
+		loginUser(session, true)
+	}
+
 	param := req.Param{
 		"user[email]":    email,
 		"user[password]": password,
