@@ -7,7 +7,6 @@ before:
     - go mod download
 builds:
   - id: msconsole-darwin-amd64
-        ldflags: -s -w -X github.com/tempor1s/msconsole-go/pkg/version.Version={{.Version}} -X github.com/tempor1s/msconsole-go/pkg/version.BuildDate={{.Date}} -X github.com/tempor1s/msconsole-go/pkg/version.CommitHash={{ .ShortCommit }}
     binary: msc
     env:
       - CGO_ENABLED=1

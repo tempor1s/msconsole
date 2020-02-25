@@ -24,7 +24,7 @@
 
 ```bash
 # tap the repo
-brew tap tempor1s/msconsole https://github.com/BenAndGarys/msconsole-go
+brew tap tempor1s/msconsole https://github.com/tempor1s/msconsole-go
 # install the CLI tool
 brew install msconsole-go
 # get a list of all the commands
