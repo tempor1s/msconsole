@@ -1,8 +1,29 @@
 version: '3'
 services:
-  bot:
+  server:
     build: ./
-    volumes:
-      - ./:/app
     ports:
-      - "5000:5000"
+      - 5000:5000
+    environment:
+        DB_HOST: sqldb:3306
+        DB_NAME: msconsole
+        DB_USER: msconsole
+        DB_PASSWORD: password
+    depends_on:
+      - sqldb
+  sqldb:
+    image: mysql
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: msconsole
+      MYSQL_USER: msconsole
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+volumes:
+  my-db:

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/tempor1s/msconsole/server/db"
 )
 
 func main() {
@@ -26,10 +27,12 @@ func homeRoute(c echo.Context) error {
 
 // TODO: Add one to the checkin count
 func logCheckinRoute(c echo.Context) error {
+	db.LogCheckin()
 	return c.String(http.StatusOK, "hi there :)")
 }
 
 // TODO: Add checkin count
 func getCheckinCount(c echo.Context) error {
+	db.GetCheckins()
 	return c.String(http.StatusOK, "Checkin Count: 0")
 }

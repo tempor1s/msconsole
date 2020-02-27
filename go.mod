@@ -8,6 +8,7 @@ require (
 	github.com/antchfx/xpath v1.1.4 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/imroc/req v0.3.0
+	github.com/jinzhu/gorm v1.9.12
 	github.com/keybase/go-keychain v0.0.0-20200218013740-86d4642e4ce2
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/echo/v4 v4.1.14 // indirect
