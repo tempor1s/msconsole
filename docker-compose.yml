@@ -5,7 +5,7 @@ services:
     ports:
       - 5000:5000
     environment:
-        DB_HOST: sqldb:3306
+        DB_HOST: sqldb
         DB_NAME: msconsole
         DB_USER: msconsole
         DB_PASSWORD: password

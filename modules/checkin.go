@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
 
 	"github.com/tempor1s/msconsole/creds"
@@ -37,6 +38,9 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Log usage of the command :)
+	http.Post("https://msconsole.dev.benlafferty.me/log", "application/txt", nil)
 
 	// Print the new banner message.
 	bannerMessage := getBannerMessage(resp.String())
