@@ -10,8 +10,7 @@ require (
 	github.com/imroc/req v0.3.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/keybase/go-keychain v0.0.0-20200218013740-86d4642e4ce2
-	github.com/labstack/echo v3.3.10+incompatible // indirect
-	github.com/labstack/echo/v4 v4.1.14 // indirect
+	github.com/labstack/echo/v4 v4.1.14
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/spf13/cobra v0.0.5
 	golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d // indirect
