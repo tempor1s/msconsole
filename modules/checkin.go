@@ -113,7 +113,6 @@ func getBannerMessage(page string) string {
 	return strings.TrimSpace(nodes[0].Data)
 }
 
-// TODO: Maybe user a color lib? lol
 func colorBannerMessage(message string) string {
 	switch message {
 	// red
