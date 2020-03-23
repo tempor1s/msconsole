@@ -75,7 +75,7 @@ func getCreds() (string, string) {
 		},
 		{
 			Name:     "password",
-			Prompt:   &survey.Password{Message: "Please type enter your password."},
+			Prompt:   &survey.Password{Message: "Please enter your password."},
 			Validate: survey.Required,
 		},
 	}
