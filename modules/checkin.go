@@ -109,9 +109,15 @@ func getBannerMessage(page string) string {
 		log.Fatal(err)
 	}
 
-	// nodes := htmlquery.Find(htmlData, "//*[@id='js-header']/div[3]/div/text()")
-	// nodes := htmlquery.Find(htmlData, "/html/body/main/header/div[4]")
-	nodes := htmlquery.Find(htmlData, "/html/body/main/header/div[4]/div/text()")
+	nodes := htmlquery.Find(htmlData, "//*[@id='js-header']/div[3]/div/text()")
+
+	if len(nodes) == 0 {
+		nodes = htmlquery.Find(htmlData, "/html/body/main/header/div[4]/div/text()")
+	}
+
+	if len(nodes) == 0 {
+		return "Error getting checkin message. You may want to try to checkin manually, even though you are probabally now logged in."
+	}
 
 	return strings.TrimSpace(nodes[0].Data)
 }
