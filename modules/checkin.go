@@ -34,13 +34,13 @@ func CheckinModule(cmdCtx *cobra.Command, args []string) {
 	fmt.Printf("\nName: %s\nMS Email: %s\n\n", name, email)
 
 	// Try to log the user in
-	resp, err := session.Get(fmt.Sprintf("http://make.sc/attend/%s", args[0]))
+	resp, err := session.Get(fmt.Sprintf("https://make.sc/attend/%s", args[0]))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Log usage of the command :)
-	http.Post("https://msconsole.dev.benlafferty.me/log", "application/txt", nil)
+	http.Post("https://msconsole.dev.benl.dev/log", "application/txt", nil)
 
 	// Print the new banner message.
 	bannerMessage := getBannerMessage(resp.String())
